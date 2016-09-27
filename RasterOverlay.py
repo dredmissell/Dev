@@ -48,8 +48,10 @@ from rasterstats import zonal_stats
 # stats2 = zonal_stats(shppath, imgpath)
 # pprint(stats2)
 inpath = 'C:/Temp/ned7'
-for raster in (os.path)
+
+#for raster in (os.path)
 imgpath = 'C:/Projects/WaterCube/TestHPCCData/NEDIMG_test/USGS_NED_1_n42w086_IMG/USGS_NED_1_n42w086_IMG_Albersfel.img'
 inpath = 'C:/Temp/ned7/USGS_NED_1_n42w085_IMG.tif'
 outpath = 'C:/Temp/ned7/slopepython4.tif'
+# causes error in gdaldem
 os.system("gdaldem slope -p -alg ZevenbergenThorne -compute_edges -of GTiff " + inpath + " " +  outpath)
