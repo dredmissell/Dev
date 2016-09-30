@@ -11,15 +11,68 @@ import zipfile
 import shutil
 import errno, stat
 import logging
+from BeautifulSoup import BeautifulSoup
+import ftplib
+import socket
+
+
+zip_nhd_path = os.path.join("F:/NHD/Raw_HU4s")
+def download_nhd_zips ():
+    ftpurl = "rockyftp.cr.usgs.gov"
+    nhdurl = "vdelivery/Datasets/Staged/Hydrography/NHD/HU4/HighResolution/Shape/"
+    print "Connecting...."
+    ftp = ftplib.FTP(ftpurl, "anonymous")
+    ##ftp.set_pasv(False)
+    ftp.cwd(nhdurl)
+    print "Connected...."
+    files = ftp.nlst('*.zip')
+    for file in files:
+        print "Downloading " + file + ".................."
+        outfile = None
+        outfile = open(zip_nhd_path + os.sep + file, "wb")
+        ftp.retrbinary("RETR " + file, outfile.write)
+        outfile.close()
+
+    # # this range should catch CONUS
+    # for x in xrange(93, 66, -1):  ## 99, 64, -1 change from 125 to 99 and add 0 below
+    # #for x in xrange(93, 66, -1): ## 99, 64, -1 change from 125 to 99 and add 0 below
+    #     for y in xrange(51, 24, -1):  ## 51, 24, -1
+    #         try:
+    #             url = "ftp://rockyftp.cr.usgs.gov/vdelivery/Datasets/Staged/Hydrography/NHD/HU4/HighResolution/Shape/NHD_H_n%sw0%s.zip" % (y, x)
+    #             # works for full url
+    #             #url = "ftp://rockyftp.cr.usgs.gov/vdelivery/Datasets/Staged/Elevation/1/IMG/USGS_NED_1_n%sw%s_IMG.zip" % (y, x)
+    #             tile = "n%sw%s.zip" % (y, x)
+    #             dest = os.path.join(zip_path, tile)
+    #             ##if os.path.isfile(dest) or os.path.isfile(os.path.join(hpcc_path, tile)):
+    #             if os.path.isfile(dest):
+    #                 print "/n%sw%s.zip Already Downloaded" % (y, x)
+    #             else:
+    #
+    #                 print "Downloading " + url
+    #
+    #                 ###########################
+    #                 opener = urllib.URLopener()
+    #                 opener.retrieve(url, dest)
+    #                 ###########################
+    #
+    #                 print "Downloaded " + tile
+    #         except IOError as e:
+    #             print "I/O error({0}): {1}".format(e.errno, e.strerror)
+    #             print "Skipped " + tile
+
+download_nhd_zips()
+
+# ###############################################################################################################################################
+
 
 zip_path = os.path.join("F:/NED/RAW_TILES_9_2016/")
 # extract_path = os.path.join("c:/ned/extract2/")
 # hpcc_path = os.path.join("Z:\\NED")
-
 def download_zips ():
     # this range should catch CONUS
-    for x in xrange(93, 66, -1): ## 99, 64, -1 change from 125 to 99 and add 0 below
-        for y in xrange(51, 24, -1):  ## 51, 35, -1
+    for x in xrange(93, 66, -1):  ## 99, 64, -1 change from 125 to 99 and add 0 below
+    #for x in xrange(93, 66, -1): ## 99, 64, -1 change from 125 to 99 and add 0 below
+        for y in xrange(51, 24, -1):  ## 51, 24, -1
             try:
                 url = "ftp://rockyftp.cr.usgs.gov/vdelivery/Datasets/Staged/Elevation/1/IMG/n%sw0%s.zip" % (y, x)
                 # works for full url
@@ -43,7 +96,7 @@ def download_zips ():
                 print "I/O error({0}): {1}".format(e.errno, e.strerror)
                 print "Skipped " + tile
 
-download_zips()
+#download_zips()
 
 
 
